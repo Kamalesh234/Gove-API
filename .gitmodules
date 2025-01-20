@@ -1,0 +1,9 @@
+[submodule "gove-models"]
+	path = gove-models
+	url = https://github.com/GOVE-Finance-Team/gove-models.git
+[submodule "gove-infrastructure"]
+	path = gove-infrastructure
+	url = https://github.com/GOVE-Finance-Team/gove-infrastructure.git
+[submodule "gove-repository"]
+	path = gove-repository
+	url = https://github.com/GOVE-Finance-Team/gove-repository.git
