@@ -14,6 +14,7 @@ using GOVE.Models.Requests;
 using GOVE.Infrastructure.Commands;
 using GOVE.Infrastructure.Services.FileServer;
 using GOVE.Models.Configurations;
+using static GOVE.Infrastructure.Queries.GetNpaReportdetailsQuery;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
@@ -62,6 +63,10 @@ builder.Services.AddTransient<IRequestHandler<GetUserDesignationlevelLookups.Que
 builder.Services.AddTransient<IRequestHandler<UserReportinglevel.Query, List<ReportingLevel>>, UserReportinglevel.Handler>();
 builder.Services.AddTransient<IRequestHandler<GetProspectLookups.Query, List<Lookup>>, GetProspectLookups.Handler>();
 builder.Services.AddTransient<IRequestHandler<InsertUserDetails.Command, int>, InsertUserDetails.Handler>();
+builder.Services.AddTransient<IReportsRepository>(s => new ReportsRepository(configuration.GetConnectionString("GoveConnectionString")!));
+builder.Services.AddTransient<IRequestHandler<GetBranchLookupQuery.Query, List<BranchLookupEntities>>, GetBranchLookupQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetNpaReportdetailsQuery.Query, List<NpaReportEntities>>, GetNpaReportdetailsQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetNpasummaryReportdetailsQuery.Query, List<NpasummaryReportEntities>>, GetNpasummaryReportdetailsQuery.Handler>();
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 var app = builder.Build();
