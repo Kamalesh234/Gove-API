@@ -17,13 +17,9 @@ namespace GOVE.Admin.Services.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : BaseController
+    public class AuthController(IConfiguration configuration, IMediator mediator, IMapper mapper, ILogger<AuthController> logger) : BaseController(mediator, logger, mapper)
     {
-        private readonly IConfiguration _configuration;
-        public AuthController(IConfiguration configuration, IMediator mediator, IMapper mapper, ILogger<AuthController> logger) : base(mediator, logger, mapper)
-        {
-            _configuration = configuration;
-        }
+        private readonly IConfiguration _configuration = configuration;
 
         [HttpPost]
         [Route("GetLoginDetails")]
@@ -59,6 +55,7 @@ namespace GOVE.Admin.Services.Controllers
             }
             catch (Exception ex)
             {
+                logger.LogError($"Error Occured while trying to get the User Details: {ex.Message}. Stack Trace: {ex.StackTrace}");
                 return new BadRequestObjectResult(ex);
             }
         }

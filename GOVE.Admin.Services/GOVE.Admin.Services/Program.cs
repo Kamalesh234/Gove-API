@@ -49,13 +49,13 @@ builder.Services.AddCors(options =>
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GOVE.Admin.Services.Startup>());
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(GOVE.Models.Constants.Startup)));
 builder.Services.AddTransient<IMediator, Mediator>();
-builder.Services.AddTransient<IUserRepository>(s => new UserRepository(configuration.GetConnectionString("ConnectionString")!));
+builder.Services.AddTransient<IUserRepository>(s => new UserRepository(configuration.GetConnectionString("GoveConnectionString")!));
 builder.Services.AddTransient<IFileServerService, FileServerService>(s => new FileServerService(new FileServerConfiguration { CmsFilePath = configuration["CmsPath"], CmsUrl = configuration["CmsUrl"] }, s.GetService<ILogger<FileServerService>>()!));
 builder.Services.AddTransient<IRequestHandler<GetLoginQuery.Query, Login?>, GetLoginQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<GetUserMenusByUserId.Query, List<UserMenu>>, GetUserMenusByUserId.Handler>();
-builder.Services.AddTransient<ICompanyRepository>(s => new ComapnyRepository(configuration.GetConnectionString("ConnectionString")!));
+builder.Services.AddTransient<ICompanyRepository>(s => new ComapnyRepository(configuration.GetConnectionString("GoveConnectionString")!));
 builder.Services.AddTransient<IRequestHandler<GetCompanyMaster.Query, CompanyMasterRequest>, GetCompanyMaster.Handler>();
-builder.Services.AddTransient<IUsermanagementRepository>(s => new UserManagementRepository(configuration.GetConnectionString("ConnectionString")!));
+builder.Services.AddTransient<IUsermanagementRepository>(s => new UserManagementRepository(configuration.GetConnectionString("GoveConnectionString")!));
 builder.Services.AddTransient<IRequestHandler<UsertranslanderQuery.Query,List<UserTranslanderEntites>>, UsertranslanderQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<UserDetailsQuery.Query, UserDetailsEntities>, UserDetailsQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<UserLevelLookup.Query, List<Lookup>>, UserLevelLookup.Handler>();
@@ -67,6 +67,9 @@ builder.Services.AddTransient<IReportsRepository>(s => new ReportsRepository(con
 builder.Services.AddTransient<IRequestHandler<GetBranchLookupQuery.Query, List<BranchLookupEntities>>, GetBranchLookupQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<GetNpaReportdetailsQuery.Query, List<NpaReportEntities>>, GetNpaReportdetailsQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<GetNpasummaryReportdetailsQuery.Query, List<NpasummaryReportEntities>>, GetNpasummaryReportdetailsQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetNpahistoryReportdetailsQuery.Query, List<NpahistoryReportEntities>>, GetNpahistoryReportdetailsQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetEmployeeCodeLookups.Query, List<EmployeeCodeEntities>>, GetEmployeeCodeLookups.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetSMAReportdetailsQuery.Query, List<SMAReportEntities>>, GetSMAReportdetailsQuery.Handler>();
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 var app = builder.Build();
@@ -76,7 +79,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("AllowAngularApp");
-app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ExceptionMiddleware>();
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
