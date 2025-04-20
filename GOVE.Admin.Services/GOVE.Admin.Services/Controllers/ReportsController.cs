@@ -109,6 +109,36 @@ namespace GOVE.Admin.Services.Controllers
             }
         }
         [HttpPost]
+        [Route("GetSoadetails")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(byte[]), StatusCodes.Status200OK, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError, Web.ContentType.Json)]
+         public async Task<IActionResult> GetSOAdetails(SOAdetailsRequest Soarequest)
+        {
+            try
+            {
+                var query = new GetSoadetailsQuery.Query(Soarequest.CutoffDate, Soarequest.Accountnumber);
+                var lookup = await GoveMediator.Send(query);
+
+                return Ok(new GoveResponse
+                {
+                    Status = Status.Success,
+                    Message = lookup
+                });
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse(new Models.Responses.MessageResponse
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Error = new ErrorResponse { Exception = ex }
+
+                });
+            }
+        }
+
+        [HttpPost]
         [Route("GetNpaHistorydetails")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(byte[]), StatusCodes.Status200OK, Web.ContentType.Json)]
@@ -118,7 +148,7 @@ namespace GOVE.Admin.Services.Controllers
         {
             try
             {
-                var query = new GetNpahistoryReportdetailsQuery.Query(npahistoryrequest.UserId, npahistoryrequest.CompanyId, npahistoryrequest.FromDate, npahistoryrequest.ToDate,npahistoryrequest.Accountnumber);
+                var query = new GetNpahistoryReportdetailsQuery.Query(npahistoryrequest.UserId, npahistoryrequest.CompanyId, npahistoryrequest.FromDate, npahistoryrequest.ToDate,npahistoryrequest.Accountnumber,npahistoryrequest.Options);
                 var lookup = await GoveMediator.Send(query);
 
                 return Ok(new GoveResponse
@@ -167,18 +197,133 @@ namespace GOVE.Admin.Services.Controllers
                 });
             }
         }
-
         [HttpPost]
-        [Route("GetSMAReportdetails")]
+        [Route("GetSMATrranslanderdetails")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(byte[]), StatusCodes.Status200OK, Web.ContentType.Json)]
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest, Web.ContentType.Json)]
         [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError, Web.ContentType.Json)]
-        public async Task<IActionResult> GetSMAReportdetails(NpasmareportdetailsRequest npasmarequest)
+        public async Task<IActionResult> GetSMATrranslanderdetails(NpasmareportdetailsRequest npasmarequest)
         {
             try
             {
-                var query = new GetSMAReportdetailsQuery.Query(npasmarequest.UserId, npasmarequest.CompanyId, npasmarequest.Branch, npasmarequest.SMAType, npasmarequest.EmployeeCode);
+                var query = new GetSMAReportTranslanderQuery.Query(npasmarequest.UserId, npasmarequest.CompanyId, npasmarequest.Branch, npasmarequest.SMAType, npasmarequest.EmployeeCode, npasmarequest.CutoffDate, npasmarequest.Options,npasmarequest.Schedule_ID);
+                var lookup = await GoveMediator.Send(query);
+
+                return Ok(new GoveResponse
+                {
+                    Status = Status.Success,
+                    Message = lookup
+                });
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse(new Models.Responses.MessageResponse
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Error = new ErrorResponse { Exception = ex }
+
+                });
+            }
+        }
+        [HttpPost]
+        [Route("GetCollectiondetails")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(byte[]), StatusCodes.Status200OK, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError, Web.ContentType.Json)]
+        public async Task<IActionResult> GetCollectiondetails(CollectionreportdetailsRequest collectionrequest)
+        {
+            try
+            {
+                var query = new GetCollectionReportQuery.Query(collectionrequest.UserId, collectionrequest.CompanyId, collectionrequest.Branch, collectionrequest.BucketType, collectionrequest.EmployeeCode, collectionrequest.CutoffDate, collectionrequest.Options, collectionrequest.Schedule_ID);
+                var lookup = await GoveMediator.Send(query);
+
+                return Ok(new GoveResponse
+                {
+                    Status = Status.Success,
+                    Message = lookup
+                });
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse(new Models.Responses.MessageResponse
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Error = new ErrorResponse { Exception = ex }
+
+                });
+            }
+        }
+        [HttpPost]
+        [Route("GetMisReportdetails")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(byte[]), StatusCodes.Status200OK, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError, Web.ContentType.Json)]
+        public async Task<IActionResult> GetMisReportdetails(MISreportdetailsRequest Misrequest)
+        {
+            try
+            {
+                var query = new GetMISReportQuery.Query(Misrequest.UserId, Misrequest.CompanyId, Misrequest.Branch, Misrequest.MaturityType, Misrequest.EmployeeCode, Misrequest.CutoffDate, Misrequest.Options, Misrequest.Schedule_ID);
+                var lookup = await GoveMediator.Send(query);
+
+                return Ok(new GoveResponse
+                {
+                    Status = Status.Success,
+                    Message = lookup
+                });
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse(new Models.Responses.MessageResponse
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Error = new ErrorResponse { Exception = ex }
+
+                });
+            }
+        }
+        [HttpPost]
+        [Route("GetSaleincentiveReport")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(byte[]), StatusCodes.Status200OK, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError, Web.ContentType.Json)]
+        public async Task<IActionResult> GetSaleincentiveReport(SalesincentivedetailsRequest salesrequest)
+        {
+            try
+            {
+                var query = new GetSalesIncentiveReportQuery.Query(salesrequest.UserId,salesrequest.CutoffDate,salesrequest.Options);
+                var lookup = await GoveMediator.Send(query);
+
+                return Ok(new GoveResponse
+                {
+                    Status = Status.Success,
+                    Message = lookup
+                });
+            }
+            catch (Exception ex)
+            {
+                return ErrorResponse(new Models.Responses.MessageResponse
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Error = new ErrorResponse { Exception = ex }
+
+                });
+            }
+        }
+        [HttpPost]
+        [Route("GetCollectionincentiveReport")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(byte[]), StatusCodes.Status200OK, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status400BadRequest, Web.ContentType.Json)]
+        [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status500InternalServerError, Web.ContentType.Json)]
+        public async Task<IActionResult> GetCollectionincentiveReport(SalesincentivedetailsRequest collectionrequest)
+        {
+            try
+            {
+                var query = new GetCollectionIncentiveReportQuery.Query(collectionrequest.UserId, collectionrequest.CutoffDate, collectionrequest.Options);
                 var lookup = await GoveMediator.Send(query);
 
                 return Ok(new GoveResponse

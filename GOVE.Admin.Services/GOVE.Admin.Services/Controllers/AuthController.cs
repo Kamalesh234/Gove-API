@@ -44,12 +44,13 @@ namespace GOVE.Admin.Services.Controllers
                             Message = Models.Constants.Constants.Messages.INVALID_USER,
                         }
                     });
-                var userToken = await IdentityServer4Client.LoginAsync(_configuration[Constants.IdentityServerConfigurationKey]!, loginRequest.UserName, loginRequest.Password);
-                user.SessionExpireDate = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) + userToken.ExpiresIn;
+                //var userToken = await IdentityServer4Client.LoginAsync(_configuration[Constants.IdentityServerConfigurationKey]!, loginRequest.UserName, loginRequest.Password);
+                var userToken = "";
+                //user.SessionExpireDate = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) + userToken.ExpiresIn;
                 return Ok(new GoveResponse
                 {
                     Status = Status.Success,
-                    Message = new { User = user, Token = userToken.AccessToken, RefreshToken = userToken.RefreshToken }
+                    Message = new { User = user, Token = userToken, RefreshToken = userToken }
                 }); 
 
             }

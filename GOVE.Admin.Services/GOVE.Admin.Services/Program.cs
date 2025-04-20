@@ -1,4 +1,4 @@
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -46,6 +46,8 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader()
                           .AllowCredentials());
 });
+
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GOVE.Admin.Services.Startup>());
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(GOVE.Models.Constants.Startup)));
 builder.Services.AddTransient<IMediator, Mediator>();
@@ -67,9 +69,14 @@ builder.Services.AddTransient<IReportsRepository>(s => new ReportsRepository(con
 builder.Services.AddTransient<IRequestHandler<GetBranchLookupQuery.Query, List<BranchLookupEntities>>, GetBranchLookupQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<GetNpaReportdetailsQuery.Query, List<NpaReportEntities>>, GetNpaReportdetailsQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<GetNpasummaryReportdetailsQuery.Query, List<NpasummaryReportEntities>>, GetNpasummaryReportdetailsQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetSoadetailsQuery.Query, List<NPASOAdetailsEntities>>, GetSoadetailsQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<GetNpahistoryReportdetailsQuery.Query, List<NpahistoryReportEntities>>, GetNpahistoryReportdetailsQuery.Handler>();
 builder.Services.AddTransient<IRequestHandler<GetEmployeeCodeLookups.Query, List<EmployeeCodeEntities>>, GetEmployeeCodeLookups.Handler>();
-builder.Services.AddTransient<IRequestHandler<GetSMAReportdetailsQuery.Query, List<SMAReportEntities>>, GetSMAReportdetailsQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetSMAReportTranslanderQuery.Query, List<Dictionary<string, object>>>, GetSMAReportTranslanderQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetCollectionReportQuery.Query, List<Dictionary<string, object>>>, GetCollectionReportQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetMISReportQuery.Query, List<Dictionary<string, object>>>, GetMISReportQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetSalesIncentiveReportQuery.Query, List<Dictionary<string, object>>>, GetSalesIncentiveReportQuery.Handler>();
+builder.Services.AddTransient<IRequestHandler<GetCollectionIncentiveReportQuery.Query, List<Dictionary<string, object>>>, GetCollectionIncentiveReportQuery.Handler>();
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 var app = builder.Build();
@@ -80,6 +87,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("AllowAngularApp");
 //app.UseMiddleware<ExceptionMiddleware>();
+//app.UseRouting();
+//app.UseRouting();
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
